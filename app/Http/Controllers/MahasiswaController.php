@@ -41,21 +41,21 @@ class MahasiswaController extends Controller
      public function create(Request $req)
      {
           $model=new Mahasiswa();
-          $model->nim=>$req->nim;
-          $model->nama=>$req->nama;
-          $model->umur=>$req->umur;
-          $model->alamat=>$req->alamat;
-          $model->kota=>$req->kota;
-          $model->kelas=>$req->kelas;
-          $model->jurusan=>$req->jurusan;
+          $model->nim=$req->nim;
+          $model->nama=$req->nama;
+          $model->umur=$req->umur;
+          $model->alamat=$req->alamat;
+          $model->kota=$req->kota;
+          $model->kelas=$req->kelas;
+          $model->jurusan=$req->jurusan;
           if($model->save()) {
                $success = true;
                $message = "Data berhasil disimpan";
-          }
-          
+          } else
+          {
                $success  =false;
                $message = "Data gagal disimpan";
-          
+          }
           $balikan = [
                "success"=>$success,
                "message"=>$message,
