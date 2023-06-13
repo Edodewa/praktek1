@@ -41,21 +41,21 @@ class MahasiswaController extends Controller
      public function create(Request $req)
      {
           $model=new Mahasiswa();
-          $model->nim=>$req->nim;
-          $model->nama=>$req->nama;
-          $model->umur=>$req->umur;
-          $model->alamat=>$req->alamat;
-          $model->kota=>$req->kota;
-          $model->kelas=>$req->kelas;
-          $model->jurusan=>$req->jurusan;
+          $model->nim=$req->nim;
+          $model->nama=$req->nama;
+          $model->umur=$req->umur;
+          $model->alamat=$req->alamat;
+          $model->kota=$req->kota;
+          $model->kelas=$req->kelas;
+          $model->jurusan=$req->jurusan;
           if($model->save()) {
                $success = true;
                $message = "Data berhasil disimpan";
-          }
-          
+          } else
+          {
                $success  =false;
                $message = "Data gagal disimpan";
-          
+          }
           $balikan = [
                "success"=>$success,
                "message"=>$message,
@@ -64,5 +64,39 @@ class MahasiswaController extends Controller
 
           return response()->json($balikan);
 
+     }
+
+     public function update(Request $request, $nim)
+     {
+          $nim = $request->nim;
+          $mahasiswa = Mahasiswa::find($nim);
+          if (!$mahasiswa) {
+               return response()->json(['message' => 'Mahasiswa not found'], 404);
+          }
+          
+          $request->validate([
+               'nama' => 'required',
+               'umur' => 'required|integer',
+               'alamat' => 'required',
+               'kota' => 'required',
+               'kelas' => 'required',
+               'jurusan' => 'required',
+          ]);
+ 
+          $mahasiswa->update($request->all());
+ 
+          return response()->json(['message' => 'Mahasiswa updated successfully', 'mahasiswa' => $mahasiswa]);
+     }
+ 
+     public function destroy($nim)
+     {
+          $mahasiswa = Mahasiswa::find($nim);
+          if (!$mahasiswa) {
+               return response()->json(['message' => 'Mahasiswa not found'], 404);
+          }
+ 
+          $mahasiswa->delete();
+ 
+          return response()->json(['message' => 'Mahasiswa deleted successfully']);
      }
 }

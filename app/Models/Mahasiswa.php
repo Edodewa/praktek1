@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Mahasiswa extends Model
 {
     use HasFactory;
-    protected $guarded = [];
-
     public $table = "mahasiswa";//custom nama tabel
     protected $primaryKey = "nim";// custom primary key
     public $incrementing = false; // mematikan auto increment
     protected $keyType = "string"; // custom type primary key (defaultnya autoincrement)
+    protected $fillable = ['nim', 'nama', 'umur', 'alamat', 'kota', 'kelas', 'jurusan'];
+
 }
