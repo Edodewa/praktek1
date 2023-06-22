@@ -10,10 +10,10 @@ class MakulController extends Controller
 {
     public function indexmakul()
     {
-        return view('index_makul');
+        return view('indexmakul');
     }
 
-    public function makul_read()
+    public function read()
         {
             $model=new Makul();
             $datai=$model->all();
@@ -43,7 +43,7 @@ class MakulController extends Controller
             return response()->json($balikan);
         }
 
-        public function makul_create(Request $req)
+        public function create(Request $req)
         {
             $model=new Makul();
             $model->kode_kelas=$req->kode_kelas;
@@ -69,7 +69,7 @@ class MakulController extends Controller
             return response()->json($balikan);
         }
 
-        public function makul_update(Request $request)
+        public function update(Request $request)
         {
             $kode_kelas = $request->kode_kelas;
             $makul = Makul::find($kode_kelas);
@@ -89,7 +89,7 @@ class MakulController extends Controller
             return response()->json(['message' => 'Mata Kuliah updated successfully', 'makul' => $makul]);
         }
 
-        public function makul_destroy($kode_kelas)
+        public function destroy($kode_kelas)
         {
             $makul = Makul::find($kode_kelas);
             if (!$makul) {
