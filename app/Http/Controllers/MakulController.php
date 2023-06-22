@@ -2,103 +2,96 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Makul;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class MakulController extends Controller
 {
-    public function indexmakul()
-    {
-        return view('indexmakul');
+    public function read()
+{
+    $model=new Makul();
+
+    if(!$datax=$model ->all()) {
+        $success=false;
+        $message = "Database Eror";
+    }
+    
+    foreach($datax as $dt) {
+        $data[]=[
+            'id'=>$dt->id,
+            'nama'=>$dt->nama,
+            'pengajar'=>$dt->pengajar,
+            'jurusan'=>$dt->jurusan,
+
+        ];
+    }
+    if (!empty($data)) {
+        $success = true;
+        $message = "Data berhasil dibaca";
+    } else
+        {
+            $success = false;
+            $message = "Data tidak ditemukan/kosong";
+        }
+    $balikan = [
+        "success"=> $success,
+        "message"=> $message,
+        "data"=> @$data
+
+    ];
+
+    return response() -> json($balikan);
     }
 
-    public function read()
-        {
-            $model=new Makul();
-            $datai=$model->all();
-            foreach($datai as $dt){
-                $data[]=[
-                    'kode_kelas'=>$dt->kode_kelas,
-                    'nama_makul'=>$dt->nama_makul,
-                    'ruangan'=>$dt->ruangan,
-                    'kelas'=>$dt->kelas,
-                    'sks'=>$dt->sks
-                ];
-            }
 
-            if (!empty($data)){
-                $success = true;
-                $massage = "Data berhasil dibaca";
-            }else{
-                $success = false;
-                $massage = "Data tidak ditemukan/kosong";
-            }
-            $balikan = [
-                "success"=>$success,
-                "massage"=>$massage,
-                "data"=> @$data
-            ];
-
-            return response()->json($balikan);
+    public function create(Request $req)
+    {
+        $model=new Makul();
+        $model->id=$req->id;
+        $model->nama=$req->nama;
+        $model->pengajar=$req->pengajar;
+        $model->jurusan=$req->jurusan;
+        if($model->save()) {
+            $success=true;
+            $message="Data berhasil disimpan";
         }
 
-        public function create(Request $req)
-        {
-            $model=new Makul();
-            $model->kode_kelas=$req->kode_kelas;
-            $model->nama_makul=$req->nama_makul;
-            $model->ruangan=$req->ruangan;
-            $model->kelas=$req->kelas;
-            $model->sks=$req->sks;
+        $balikan = [
+            "success"=>$success,
+            "message"=>$message,
+            "data" => @$req->all()
+        ];
 
-            if($model->save()){
-                $success=true;
-                $massage="Data berhasil disimpan";
-            }else{
-                $success=false;
-                $massage="Data gagal disimpan";
-            }
+        return response() ->json($balikan);
+    }
 
-            $balikan = [
-                "success"=>$success,
-                "massage"=>$massage,
-                "data"=> @$req->all()
-            ];
-
-            return response()->json($balikan);
+    public function update(Request $request, $id)
+    {
+        $makul = Makul::find($id);
+        if (!$makul) {
+            return response()->json(['message' => 'Makul not found'], 404);
         }
 
-        public function update(Request $request)
-        {
-            $kode_kelas = $request->kode_kelas;
-            $makul = Makul::find($kode_kelas);
-            if (!$kode_kelas) {
-                return response()->json(['message' => 'Mata Kuliah not found'], 404);
-            }
+        $request->validate([
+            'nama' => 'required',
+            'pengajar' => 'required',
+            'jurusan' => 'required',
+        ]);
 
-            $request->validate([
-                'nama_makul' => 'required',
-                'ruangan' => 'required',
-                'kelas' => 'required',
-                'sks' => 'required',
-            ]);
+        $makul->update($request->all());
 
-            $makul->update($request->all());
+        return response()->json(['message' => 'Makul updated successfully', 'makul' => $makul]);
+    }
 
-            return response()->json(['message' => 'Mata Kuliah updated successfully', 'makul' => $makul]);
+    public function destroy($id)
+    {
+        $makul = Makul::find($id);
+        if (!$makul) {
+            return response()->json(['message' => 'Makul not found'], 404);
         }
 
-        public function destroy($kode_kelas)
-        {
-            $makul = Makul::find($kode_kelas);
-            if (!$makul) {
-                return response()->json(['message' => 'Mata Kuliah not found'], 404);
-            }
-    
-            $makul->delete();
-    
-            return response()->json(['message' => 'Mata Kuliah deleted successfully']);
-        }
+        $makul->delete();
 
+        return response()->json(['message' => 'Makul deleted successfully']);
+    }
 }

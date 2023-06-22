@@ -9,8 +9,8 @@ class Makul extends Model
 {
     use HasFactory;
     public $table = "makul"; // custom nama tabel
-    protected $primaryKey = "kode_kelas"; // custom primary key
+    protected $primaryKey = "id"; // custom primary key
     public $incrementing=false; // mematikan auto increment
     protected $keyType="string"; // custom type primary key (defaultnya autoincreme
-    protected $fillable = ['kode_kelas', 'nama_makul', 'ruangan', 'kelas', 'sks'];
+    protected $fillable = ['id', 'nama', 'pengajar','jurusan'];
 }

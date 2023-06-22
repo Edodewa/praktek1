@@ -4,32 +4,28 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Makul extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('makul', function (Blueprint $table) {
-            $table->string('kode_kelas')->primary();
-            $table->string('nama_makul');
-            $table->string('ruangan');
-            $table->string('kelas');
-            $table->string('sks');
+            $table->string('id')->primary();
+            $table->string('nama');
+            $table->string('pengajar');
+            $table->string('jurusan');
+            
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('makul');
+        Schema::drop('makul');
     }
-}
+};
